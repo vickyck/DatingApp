@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DatingApp.API.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class ValuesController : ControllerBase
     {
         private readonly DataContext _context;
@@ -21,16 +24,19 @@ namespace DatingApp.API.Controllers
         }
 
         // GET: api/<controller>
+        //[Authorize]
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetValues()
+        public async Task<IActionResult> Get()
         {
            var values = await _context.Values.ToListAsync();
            return Ok(values);
         }
 
         // GET api/<controller>/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetValue(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var value = await _context.Values.FirstOrDefaultAsync(x => x.Id == id);
             return Ok(value);
